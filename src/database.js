@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true
-})
-    .then( db => console.log('DB is connect'))
-    .catch(err => console.error(err))
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+  })
+  .then((db) => console.log("DB is connect"))
+  .catch((err) => console.error(err));
