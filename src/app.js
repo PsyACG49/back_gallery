@@ -3,6 +3,8 @@ const morgan = require("morgan");
 const multer = require("multer");
 const path = require("path");
 
+const galleryRoutes = require("./routes/gallery.routes");
+
 //initialization
 const app = express();
 require("./database");
@@ -24,6 +26,6 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 //Routes
-app.use(require("./routes/index"));
+app.use("/api/v1/images", galleryRoutes);
 
 module.exports = app;
