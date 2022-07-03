@@ -20,6 +20,7 @@ router.post("/api/images/upload", async (req, res) => {
     imgUrl: result.url,
     public_id: result.public_id,
   });
+  console.log(newImg);
 
   await newImg.save();
   await fs.unlink(req.file.path);
@@ -27,10 +28,22 @@ router.post("/api/images/upload", async (req, res) => {
   res.json("recived");
 });
 
-router.get("/api/images", async (req, res) => {});
+router.get("/api/images", async (req, res) => {
+  const imgs = await Img.find();
+  res.json(imgs);
+});
 
-router.get("/api/images/:id", async (req, res) => {});
+router.get("/api/images/:img_id", async (req, res) => {
+  const { img_id } = req.params;
+  const image = await Img.findById(img_id);
+  res.json(image);
+});
 
-router.delete("/api/images/:id", async (req, res) => {});
+router.delete("/api/images/:img_id", async (req, res) => {
+  const { img_id } = req.params;
+  const img = await Img.findByIdAndRemove(img_id);
+  const result = await cloudinary.v2.uploader.destroy(img.public_id);
+  res.json("image deleted");
+});
 
 module.exports = router;
