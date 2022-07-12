@@ -1,18 +1,13 @@
 const { Router } = require("express");
 const router = Router();
-const {
-  createImage,
-  getImages,
-  getImage,
-  deleteImage,
-} = require("../controllers/gallery.controller");
+const ctrGallery = require("../controllers/gallery.controller");
 
-router.post("/upload", createImage);
+router.post("/upload", ctrGallery.createImage);
 
-router.get("/", getImages);
+router.get("/", ctrGallery.getImages);
 
-router.get("/:img_id", getImage);
+router.get("/:img_id", ctrGallery.getImage);
 
-router.delete("/:img_id", deleteImage);
+router.delete("/:img_id", ctrGallery.deleteImage);
 
 module.exports = router;
