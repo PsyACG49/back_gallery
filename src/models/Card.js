@@ -6,7 +6,7 @@ const Card = new Schema({
   classCard: String,
   services: [
     {
-      type: String,
+      typee: String,
       price: Number,
     },
   ],
