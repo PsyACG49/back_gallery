@@ -6,6 +6,7 @@ const path = require("path");
 
 const galleryRoutes = require("./routes/gallery.routes");
 const cardRoutes = require("./routes/card.router");
+const authRoutes = require("./routes/auth.routes");
 
 //initialization
 const app = express();
@@ -31,5 +32,17 @@ app.use(multer({ storage }).single("image"));
 //Routes
 app.use("/api/v1/images", galleryRoutes);
 app.use("/api/v1/cards", cardRoutes);
+app.use("/api/v1/auth", authRoutes);
+
+app.use((err, req, res, next) => {
+  const errorStatus = err.status || 500;
+  const errorMessage = err.message || "Something was wrong";
+  return res.status(errorStatus).json({
+    seccess: false,
+    status: errorStatus,
+    message: errorMessage,
+    stack: err.stack,
+  });
+});
 
 module.exports = app;
