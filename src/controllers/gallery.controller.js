@@ -8,38 +8,52 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const createImage = async (req, res) => {
+const createImage = async (req, res, next) => {
   const { title, description } = req.body;
-  const result = await cloudinary.v2.uploader.upload(req.file.path);
-  const newImg = new Img({
-    title: title,
-    description: description,
-    imgUrl: result.url,
-    public_id: result.public_id,
-  });
-
-  await newImg.save();
-  await fs.unlink(req.file.path);
-
-  res.json("recived");
+  try {
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+    const newImg = new Img({
+      title: title,
+      description: description,
+      imgUrl: result.url,
+      public_id: result.public_id,
+    });
+    await newImg.save();
+    await fs.unlink(req.file.path);
+    res.status(200).json("recived");
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getImages = async (req, res) => {
-  const imgs = await Img.find();
-  res.json(imgs);
+const getImages = async (req, res, next) => {
+  try {
+    const imgs = await Img.find();
+    res.status(200).json(imgs);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getImage = async (req, res) => {
+const getImage = async (req, res, next) => {
   const { img_id } = req.params;
-  const image = await Img.findById(img_id);
-  res.json(image);
+  try {
+    const image = await Img.findById(img_id);
+    res.status(200).json(image);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const deleteImage = async (req, res) => {
+const deleteImage = async (req, res, next) => {
   const { img_id } = req.params;
-  const img = await Img.findByIdAndRemove(img_id);
-  const result = await cloudinary.v2.uploader.destroy(img.public_id);
-  res.json("image deleted");
+  try {
+    const img = await Img.findByIdAndRemove(img_id);
+    const result = await cloudinary.v2.uploader.destroy(img.public_id);
+    res.status(200).json("image deleted");
+  } catch (error) {
+    next(error);
+  }
 };
 
 const updateImage = (req, res) => {};
