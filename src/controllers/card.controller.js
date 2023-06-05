@@ -2,7 +2,6 @@ const Card = require("../models/Card");
 
 const createCard = async (req, res, next) => {
   const { serviceName, serviceIcon, classCard, services } = req.body;
-  // console.log(req.body);
   try {
     const newCard = new Card({
       serviceName,
@@ -39,13 +38,21 @@ const getCard = async (req, res, next) => {
 const deleteCard = async (req, res, next) => {
   const { card_id } = req.params;
   try {
-    const cardDeleted = await Card.findByIdAndRemove(card_id);
+    await Card.findByIdAndRemove(card_id);
     res.status(200).json({ msg: "Card Deleted" });
   } catch (error) {
     next(error);
   }
 };
 
-const updateCard = async (req, res) => {};
+const updateCard = async (req, res) => {
+  const { card_id } = req.params;
+  try {
+    await Card.findByIdAndUpdate(card_id, req.body);
+    res.status(200).json("Product updated");
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = { createCard, getCards, getCard, deleteCard, updateCard };

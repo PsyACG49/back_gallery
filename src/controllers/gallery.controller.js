@@ -49,13 +49,11 @@ const deleteImage = async (req, res, next) => {
   const { img_id } = req.params;
   try {
     const img = await Img.findByIdAndRemove(img_id);
-    const result = await cloudinary.v2.uploader.destroy(img.public_id);
+    await cloudinary.v2.uploader.destroy(img.public_id);
     res.status(200).json("image deleted");
   } catch (error) {
     next(error);
   }
 };
 
-const updateImage = (req, res) => {};
-
-module.exports = { createImage, getImages, getImage, deleteImage, updateImage };
+module.exports = { createImage, getImages, getImage, deleteImage };
